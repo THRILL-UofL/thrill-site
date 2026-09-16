@@ -1250,7 +1250,7 @@ footer {
 .hero-photo-bg {
   position: absolute;
   inset: 0;
-  background: url('../coaster-bg.jpg') center center / cover no-repeat;
+  background: url('coaster-bg.jpg') center center / cover no-repeat;
   opacity: 0.13;
   z-index: 0;
 }
