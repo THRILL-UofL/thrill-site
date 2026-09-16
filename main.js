@@ -35,12 +35,28 @@ function showToast(message) {
   setTimeout(() => toast.classList.remove('show'), 3500);
 }
 
-// Contact form
-document.getElementById('contact-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  showToast('Message received. We\'ll get back to you.');
-  e.target.reset();
-});
+// Contact form — Netlify Forms handles submission, we just show success
+const contactFormEl = document.getElementById('contact-form');
+if (contactFormEl) {
+  contactFormEl.addEventListener('submit', (e) => {
+    // Let Netlify receive the POST, then show toast
+    setTimeout(() => {
+      showToast('Message received. We will get back to you soon.');
+      contactFormEl.reset();
+    }, 500);
+  });
+}
+
+// Netlify Identity redirect for CMS
+if (window.netlifyIdentity) {
+  window.netlifyIdentity.on('init', user => {
+    if (!user) {
+      window.netlifyIdentity.on('login', () => {
+        document.location.href = '/admin/';
+      });
+    }
+  });
+}
 
 // Start on home
 showPage('home');

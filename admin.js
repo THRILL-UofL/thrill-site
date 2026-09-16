@@ -443,38 +443,14 @@ function renderPublicSponsors() {
   });
 }
 
-// ─── SPONSOR INQUIRY STORAGE ──────────────────────────────────────────────────
-function loadInquiries() {
-  const saved = localStorage.getItem('thrill_inquiries');
-  return saved ? JSON.parse(saved) : [];
-}
-function saveInquiries(list) { localStorage.setItem('thrill_inquiries', JSON.stringify(list)); }
-
-let inquiries = loadInquiries();
-
-// Wire up the public sponsor inquiry form to save submissions
+// Sponsor form — Netlify Forms handles the POST, we show a toast
 const sponsorFormEl = document.getElementById('sponsor-form');
 if (sponsorFormEl) {
-  sponsorFormEl.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const data = new FormData(e.target);
-    const fields = [...e.target.querySelectorAll('input, select, textarea')];
-    const entry = {
-      id: Date.now(),
-      receivedAt: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }),
-      read: false,
-      name:     fields[0]?.value || '',
-      company:  fields[1]?.value || '',
-      email:    fields[2]?.value || '',
-      phone:    fields[3]?.value || '',
-      interest: fields[4]?.value || '',
-      message:  fields[5]?.value || '',
-    };
-    inquiries = loadInquiries();
-    inquiries.unshift(entry);
-    saveInquiries(inquiries);
-    showToast('Inquiry received. We will be in touch soon.');
-    e.target.reset();
+  sponsorFormEl.addEventListener('submit', () => {
+    setTimeout(() => {
+      showToast('Inquiry received. Preston will be in touch soon.');
+      sponsorFormEl.reset();
+    }, 500);
   });
 }
 
