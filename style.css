@@ -105,8 +105,8 @@ nav {
 }
 
 /* ─── PAGE WRAPPER ──────────────────────────────────────────────────────────── */
-.page { display: none; padding-top: 64px; min-height: 100vh; }
-.page.active { display: block; }
+body { padding-top: 64px; }
+
 
 /* ─── HERO ──────────────────────────────────────────────────────────────────── */
 .hero {
