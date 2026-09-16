@@ -327,7 +327,7 @@
     </div>
     <div class="contact-form">
       <h3>Send a Message</h3>
-      <form id="contact-form" name="contact" method="POST" netlify netlify-honeypot="bot-field">
+      <form id="contact-form" name="contact" method="POST" action="/success.html" netlify netlify-honeypot="bot-field">
         <input type="hidden" name="form-name" value="contact">
         <p style="display:none;"><input name="bot-field"></p>
         <div class="form-group"><label>Name</label><input type="text" name="name" placeholder="Your name" required></div>
@@ -427,7 +427,7 @@
       </div>
       <div class="contact-form">
         <h3>Sponsorship Inquiry</h3>
-        <form id="sponsor-form" name="sponsor-inquiry" method="POST" netlify netlify-honeypot="bot-field">
+        <form id="sponsor-form" name="sponsor-inquiry" method="POST" action="/success.html" netlify netlify-honeypot="bot-field">
           <input type="hidden" name="form-name" value="sponsor-inquiry">
           <p style="display:none;"><input name="bot-field"></p>
           <div class="form-group"><label>Your Name</label><input type="text" name="name" placeholder="Jane Smith" required></div>
