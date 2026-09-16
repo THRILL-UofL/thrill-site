@@ -1,0 +1,70 @@
+backend:
+  name: github
+  repo: THRILL-UofL/thrill-site
+  branch: main
+
+media_folder: "pdfs"
+public_folder: "pdfs"
+
+collections:
+  - name: "events"
+    label: "Events"
+    folder: "_data/events"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Event Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "string", hint: "e.g. Oct 22, 2026" }
+      - { label: "Details", name: "detail", widget: "text" }
+      - label: "Tag"
+        name: "tag"
+        widget: "select"
+        options:
+          - { label: "Event", value: "event" }
+          - { label: "Speaker", value: "speaker" }
+          - { label: "Tour", value: "tour" }
+          - { label: "Competition", value: "comp" }
+          - { label: "Fair", value: "fair" }
+      - { label: "Tag Label", name: "tagLabel", widget: "string" }
+
+  - name: "newsletter"
+    label: "Newsletter Issues"
+    folder: "_data/newsletter"
+    create: true
+    slug: "issue-{{issue}}"
+    fields:
+      - { label: "Volume", name: "volume", widget: "number", default: 1 }
+      - { label: "Issue Number", name: "issue", widget: "number", default: 1 }
+      - { label: "Date", name: "date", widget: "string", hint: "e.g. November 2026" }
+      - { label: "Description", name: "description", widget: "text" }
+      - label: "PDF File"
+        name: "pdf"
+        widget: "file"
+        media_folder: "/pdfs"
+        public_folder: "/pdfs"
+        hint: "Upload the PDF for this issue"
+        required: false
+      - { label: "Published", name: "published", widget: "boolean", default: false }
+
+  - name: "sponsors"
+    label: "Sponsors"
+    folder: "_data/sponsors"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Company Name", name: "name", widget: "string" }
+      - label: "Tier"
+        name: "tier"
+        widget: "select"
+        options:
+          - { label: "Presenting Partner", value: "presenting" }
+          - { label: "Gold Sponsor", value: "gold" }
+          - { label: "Silver Sponsor", value: "silver" }
+          - { label: "Bronze Sponsor", value: "bronze" }
+          - { label: "Supporter", value: "supporter" }
+      - { label: "Website URL", name: "url", widget: "string", required: false }
+      - label: "Logo"
+        name: "logo"
+        widget: "image"
+        required: false
+        hint: "Upload sponsor logo"
