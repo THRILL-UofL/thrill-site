@@ -77,16 +77,21 @@ function adminLogout() {
   document.getElementById('admin-login-error').style.display = 'none';
 }
 
-document.getElementById('admin-password-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') adminLogin();
-});
+const pwInput = document.getElementById('admin-password-input');
+if (pwInput) {
+  pwInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') adminLogin();
+  });
+}
 
 // ─── ADMIN TABS ───────────────────────────────────────────────────────────────
 function showAdminTab(tab) {
   document.querySelectorAll('.admin-tab-content').forEach(t => t.style.display = 'none');
   document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('admin-tab-' + tab).style.display = 'block';
-  document.querySelector(`.admin-tab-btn[data-tab="${tab}"]`).classList.add('active');
+  const tabEl = document.getElementById('admin-tab-' + tab);
+  const tabBtn = document.querySelector(`.admin-tab-btn[data-tab="${tab}"]`);
+  if (tabEl) tabEl.style.display = 'block';
+  if (tabBtn) tabBtn.classList.add('active');
 }
 document.querySelectorAll('.admin-tab-btn').forEach(btn => {
   btn.addEventListener('click', () => showAdminTab(btn.dataset.tab));
@@ -450,6 +455,7 @@ document.querySelectorAll('.admin-tab-btn').forEach(btn => {
     if (btn.dataset.tab === 'inquiries') renderAdminInquiries();
   });
 });
+
 
 // Sponsor inquiry form — save to localStorage for admin panel
 const sponsorFormEl = document.getElementById('sponsor-form');
