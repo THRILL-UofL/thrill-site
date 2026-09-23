@@ -4,11 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Events | THRILL at University of Louisville</title>
-  <meta name="description" content="Upcoming THRILL events including guest speakers, the Kentucky Kingdom facility tour, CoasterVille Coasters 101, and the 2027 Ride Engineering Competition at Hersheypark.">
+  <meta name="description" content="Upcoming THRILL events including guest speakers, the Kentucky Kingdom facility tour, CoasterVille, and the 2027 Ride Engineering Competition at Hersheypark.">
   <meta property="og:title" content="Events | THRILL at University of Louisville">
-  <meta property="og:description" content="Guest speakers, park tours, CoasterVille, and REC at Hersheypark 2027. See what THRILL has coming up.">
   <meta property="og:url" content="https://thrilluofl.org/events.html">
-  <meta property="og:type" content="website">
   <link rel="canonical" href="https://thrilluofl.org/events.html">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="/style.css">
@@ -35,12 +33,22 @@
   <h1 class="section-title">Events</h1>
   <p class="section-body">From guest speakers and park tours to public education events and national competitions, here's everything THRILL has coming up.</p>
 
-  <!-- Calendar view -->
-  <div id="events-calendar" style="margin:3rem 0; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); padding:1.5rem;"></div>
+  <!-- Calendar -->
+  <div id="events-calendar" style="margin:3rem 0;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);padding:1.5rem;"></div>
 
-  <!-- Full list -->
-  <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:1.8rem;font-weight:700;color:#F8F8F8;margin-bottom:1.5rem;">All Events</h2>
-  <div class="events-list" id="public-events-list"></div>
+  <!-- Upcoming / Past tabs -->
+  <div class="events-tab-bar">
+    <button class="events-tab-btn active" onclick="switchEventsTab('upcoming', this)">Upcoming</button>
+    <button class="events-tab-btn" onclick="switchEventsTab('past', this)">Past Events</button>
+  </div>
+
+  <div id="tab-upcoming">
+    <div class="events-list" id="public-events-upcoming"></div>
+  </div>
+
+  <div id="tab-past" style="display:none;">
+    <div class="events-list" id="public-events-past"></div>
+  </div>
 </div>
 
 <footer>
@@ -50,11 +58,20 @@
     <li><a href="/rec.html">REC</a></li>
     <li><a href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=Sm4k3TRUFU6K45Gtl5eyCSk1h0RKy19KmGPSjp9gwUJUMkxBMTVJUjYzVU82VDJEQk9XSVUwSllZWi4u" target="_blank">Join</a></li>
   </ul>
-  <div style="font-size:0.8rem; color:rgba(248,248,248,0.2);">© 2026 THRILL · University of Louisville</div>
+  <div style="font-size:0.8rem;color:rgba(248,248,248,0.2);">© 2026 THRILL · University of Louisville</div>
   <div style="margin-top:0.5rem;"><a class="admin-footer-link" href="/admin.html">Admin</a></div>
 </footer>
 
+<script>
+function switchEventsTab(tab, btn) {
+  document.getElementById('tab-upcoming').style.display = tab === 'upcoming' ? 'block' : 'none';
+  document.getElementById('tab-past').style.display    = tab === 'past'     ? 'block' : 'none';
+  document.querySelectorAll('.events-tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
 <script src="/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="/admin.js"></script>
 </body>
 </html>
