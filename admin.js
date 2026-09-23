@@ -206,10 +206,13 @@ async function saveEventForm() {
   renderPublicEvents();
 }
 
-document.getElementById('event-tag').addEventListener('change', function() {
-  const labels = { speaker:'Speaker', tour:'Tour', event:'Event', comp:'Competition', fair:'Fair' };
-  document.getElementById('event-tag-label').value = labels[this.value] || 'Event';
-});
+const eventTagEl = document.getElementById('event-tag');
+if (eventTagEl) {
+  eventTagEl.addEventListener('change', function() {
+    const labels = { speaker:'Speaker', tour:'Tour', event:'Event', comp:'Competition', fair:'Fair' };
+    document.getElementById('event-tag-label').value = labels[this.value] || 'Event';
+  });
+}
 
 // ─── ISSUES ADMIN ─────────────────────────────────────────────────────────────
 function renderAdminIssues() {
