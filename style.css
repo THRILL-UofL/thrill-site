@@ -2191,3 +2191,14 @@ footer {
   /* Keep Join Us visible on phones, next to the menu button */
   .nav-cta { display: inline-block; margin-left: auto; margin-right: 1rem; padding: 0.4rem 1rem; font-size: 0.95rem; }
 }
+
+/* ─── LOGO (standard mark everywhere) ──────────────────────────────────────── */
+.nav-wordmark { display: flex; align-items: center; line-height: 0; }
+.nav-wordmark img { height: 46px; width: auto; display: block; }
+.footer-logo { display: block; height: 56px; width: auto; margin-bottom: 0.6rem; }
+.hero-title.hero-logo { line-height: 0; font-size: 0; margin-bottom: 1rem; }
+.hero-title.hero-logo img { display: block; width: min(560px, 82vw); height: auto; }
+@media (max-width: 768px) {
+  .nav-wordmark img { height: 40px; }
+  .footer-logo { height: 48px; }
+}
