@@ -98,3 +98,74 @@ if (window.netlifyIdentity) {
     }
   });
 }
+
+// ─── NEWSLETTER SIGNUP (Mailchimp) ────────────────────────────────────────────
+// Any <form class="mc-signup"> posts to Mailchimp's JSONP endpoint so people stay
+// on the page. Without JavaScript the form still works as a normal POST.
+function cleanMailchimpMessage(msg) {
+  const div = document.createElement('div');
+  div.innerHTML = String(msg || '');
+  return (div.textContent || '').replace(/^\d+\s*-\s*/, '').trim();
+}
+
+document.querySelectorAll('form.mc-signup').forEach(form => {
+  const status = form.querySelector('.mc-status');
+  const button = form.querySelector('button[type="submit"]');
+
+  function setStatus(text, kind) {
+    if (!status) return;
+    status.textContent = text;
+    status.classList.remove('is-success', 'is-error');
+    if (kind) status.classList.add('is-' + kind);
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const callbackName = 'thrillMc_' + Date.now();
+    const params = new URLSearchParams(new FormData(form));
+    params.set('c', callbackName);
+    const url = form.action.replace('/subscribe/post?', '/subscribe/post-json?') + '&' + params.toString();
+
+    const script = document.createElement('script');
+    let finished = false;
+    const finish = () => {
+      finished = true;
+      clearTimeout(timer);
+      script.remove();
+      try { delete window[callbackName]; } catch (err) { window[callbackName] = undefined; }
+      if (button) button.disabled = false;
+    };
+    const timer = setTimeout(() => {
+      if (finished) return;
+      finish();
+      setStatus('Something went wrong. Please try again in a moment.', 'error');
+    }, 12000);
+
+    window[callbackName] = (data) => {
+      finish();
+      const msg = cleanMailchimpMessage(data && data.msg);
+      if (data && data.result === 'success') {
+        form.classList.add('is-done');
+        setStatus(/confirm/i.test(msg)
+          ? 'Almost there! Check your inbox and click the confirmation link to finish subscribing.'
+          : "You're subscribed. Thanks for following THRILL!", 'success');
+      } else if (/already subscribed/i.test(msg)) {
+        form.classList.add('is-done');
+        setStatus("You're already on the list. Thanks for following THRILL!", 'success');
+      } else {
+        setStatus(msg || 'Something went wrong. Please try again.', 'error');
+      }
+    };
+
+    script.onerror = () => {
+      if (finished) return;
+      finish();
+      setStatus('Could not reach the signup service. Please try again.', 'error');
+    };
+
+    if (button) button.disabled = true;
+    setStatus('Signing you up…');
+    script.src = url;
+    document.body.appendChild(script);
+  });
+});
