@@ -116,6 +116,37 @@ function cleanMailchimpMessage(msg) {
   return (div.textContent || '').replace(/^\d+\s*-\s*/, '').trim();
 }
 
+// Backup log: every signup attempt is also saved to Netlify Forms
+// (Netlify dashboard > Forms > newsletter-signup), with what Mailchimp said back.
+function signupSpot(form) {
+  if (form.classList.contains('mc-popup-form')) return 'Popup';
+  if (form.classList.contains('footer-signup')) return 'Footer';
+  if (form.classList.contains('join-path-form')) return 'Join page';
+  if (form.classList.contains('mc-signup-full')) return 'Newsletter page';
+  return 'Other';
+}
+
+function logSignupToNetlify(form, fields, result) {
+  if (fields.get(MC_HONEYPOT)) return; // spam bot, skip
+  const body = new URLSearchParams({
+    'form-name': 'newsletter-signup',
+    first_name: fields.get('FNAME') || '',
+    last_name: fields.get('LNAME') || '',
+    email: fields.get('EMAIL') || '',
+    mailchimp_result: result,
+    signup_spot: signupSpot(form),
+    page: location.pathname
+  });
+  try {
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString(),
+      keepalive: true
+    }).catch(() => {});
+  } catch (err) { /* never block the signup on the backup */ }
+}
+
 function wireMailchimpForm(form) {
   const status = form.querySelector('.mc-status');
   const button = form.querySelector('button[type="submit"]');
@@ -137,7 +168,17 @@ function wireMailchimpForm(form) {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const callbackName = 'thrillMc_' + Date.now();
-    const params = new URLSearchParams(new FormData(form));
+    const fields = new FormData(form);
+    let logged = false;
+    const logOnce = (result) => {
+      if (logged) return;
+      logged = true;
+      window.removeEventListener('pagehide', onLeave);
+      logSignupToNetlify(form, fields, result);
+    };
+    const onLeave = () => logOnce('Left the page before Mailchimp replied');
+    window.addEventListener('pagehide', onLeave);
+    const params = new URLSearchParams(fields);
     params.set('c', callbackName);
     const url = form.action.replace('/subscribe/post?', '/subscribe/post-json?') + '&' + params.toString();
 
@@ -153,6 +194,7 @@ function wireMailchimpForm(form) {
     const timer = setTimeout(() => {
       if (finished) return;
       finish();
+      logOnce('No reply from Mailchimp (timed out)');
       setStatus('Something went wrong. Please try again in a moment.', 'error');
     }, 12000);
 
@@ -160,12 +202,16 @@ function wireMailchimpForm(form) {
       finish();
       const msg = cleanMailchimpMessage(data && data.msg);
       if (data && data.result === 'success') {
-        markDone(/confirm/i.test(msg)
+        const needsConfirm = /confirm/i.test(msg);
+        logOnce(needsConfirm ? 'Waiting on email confirmation' : 'Subscribed');
+        markDone(needsConfirm
           ? 'Almost there! Check your inbox and click the confirmation link to finish subscribing.'
           : "You're subscribed. Thanks for following THRILL!");
       } else if (/already subscribed/i.test(msg)) {
+        logOnce('Already on the list');
         markDone("You're already on the list. Thanks for following THRILL!");
       } else {
+        logOnce('Error: ' + (msg || 'unknown'));
         setStatus(msg || 'Something went wrong. Please try again.', 'error');
       }
     };
@@ -173,6 +219,7 @@ function wireMailchimpForm(form) {
     script.onerror = () => {
       if (finished) return;
       finish();
+      logOnce('Could not reach Mailchimp');
       setStatus('Could not reach the signup service. Please try again.', 'error');
     };
 

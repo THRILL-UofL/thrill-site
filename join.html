@@ -102,6 +102,17 @@
   <div style="margin-top:0.5rem;"><a class="admin-footer-link" href="/admin.html">Admin</a></div>
 </footer>
 
+<!-- Netlify Forms: backup log of newsletter signups. main.js fills this in; it is never shown. -->
+<form name="newsletter-signup" netlify netlify-honeypot="bot-field" hidden>
+  <input type="text" name="first_name">
+  <input type="text" name="last_name">
+  <input type="email" name="email">
+  <input type="text" name="mailchimp_result">
+  <input type="text" name="signup_spot">
+  <input type="text" name="page">
+  <input type="text" name="bot-field">
+</form>
+
 <script src="/main.js"></script>
 </body>
 </html>
