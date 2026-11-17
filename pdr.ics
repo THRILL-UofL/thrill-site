@@ -1,0 +1,18 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//THRILL at UofL//PDR 2027//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:pdr-2027@thrilluofl.org
+DTSTAMP:20261117T180000Z
+DTSTART:20270114T000000Z
+DTEND:20270114T013000Z
+SUMMARY:THRILL Preliminary Design Review (REC 2027)
+DESCRIPTION:THRILL's REC team presents its ride concept and initial risk as
+ sessment for the 2027 National Ride Engineering Competition. The join link
+  is emailed to everyone who RSVPs at https://thrilluofl.org/pdr
+LOCATION:Online
+URL:https://thrilluofl.org/pdr
+END:VEVENT
+END:VCALENDAR
