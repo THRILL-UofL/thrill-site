@@ -234,11 +234,11 @@ document.querySelectorAll('form.mc-signup').forEach(wireMailchimpForm);
 
 // ─── NEWSLETTER POPUP ─────────────────────────────────────────────────────────
 // Shows once after 20 seconds or halfway down the page. Skipped on the newsletter,
-// join, and admin pages, for anyone who already subscribed, and for 14 days after
+// join, PDR RSVP, and admin pages, for anyone who already subscribed, and for 14 days after
 // someone closes it.
 (function newsletterPopup() {
   const page = location.pathname.replace(/\.html$/, '').replace(/\/+$/, '') || '/';
-  if (/^\/(newsletter|join|success)$/.test(page) || page.indexOf('admin') !== -1) return;
+  if (/^\/(newsletter|join|success|pdr|pdr-thanks)$/.test(page) || page.indexOf('admin') !== -1) return;
   if (storeGet(MC_SUBSCRIBED_KEY)) return;
   const dismissedAt = Number(storeGet(MC_DISMISSED_KEY) || 0);
   if (dismissedAt && Date.now() - dismissedAt < 14 * 24 * 60 * 60 * 1000) return;
